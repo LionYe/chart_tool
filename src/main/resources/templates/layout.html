@@ -1,0 +1,43 @@
+<html xmlns:th="http://www.thymeleaf.org"  >
+  <head th:fragment="htmlhead">
+  	<script th:inline="javascript">
+  		 //thymeleaf  注入路径访问头地址
+  		 var rootPath = /*[[@{/}]]*/;
+	</script>
+   	<title th:text="${title}">(title)</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+
+
+
+        
+    <script type="text/javascript" th:src="@{/lib/sockjs.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/stomp.min.js}"></script>
+    <script>
+    //post提交表单
+    function qxAjaxFormSubmitPost(url, interfaceType, param, sucCallBack, errCallBack) {
+    		$.ajax({
+    			type : interfaceType,
+    			url : url,
+    			cache : false,
+    			timeout : 30000,
+    			data : param,
+    			async:false,
+    			success :function(data){
+    				sucCallBack(data);
+    			} ,
+    			error : errCallBack,
+    			complete:function(XMLHttpRequest){
+    				
+    			},
+    		});
+    } 
+    </script>
+
+  <body>
+
+	
+  </body>
+</html>

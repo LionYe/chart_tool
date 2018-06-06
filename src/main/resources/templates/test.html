@@ -1,0 +1,67 @@
+<html xmlns:th="http://www.thymeleaf.org"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+ <head th:include="layout :: htmlhead"  th:with=" title='index'">
+ </head>
+<body class=" theme-blue">
+	<div th:replace="layout :: navbar">(navbar)</div>
+    Welcome<br/><br/><br/>    <hr/>
+    
+    <input id="text" type="text"/>
+    <button onclick="send()">发送消息</button>
+
+    <div id="message"></div>
+</body>
+
+<script type="text/javascript">
+	var socket;  
+	if(typeof(WebSocket) == "undefined") {  
+	    console.log("您的浏览器不支持WebSocket");  
+	}else{  
+	    console.log("您的浏览器支持WebSocket");
+	    socket = new WebSocket("ws://localhost:8055/chart/websocket");  
+        //打开事件  
+        socket.onopen = function() {  
+            console.log("Socket 已打开");  
+            //socket.send("这是来自客户端的消息" + location.href + new Date());  
+        };  
+        //获得消息事件  
+        socket.onmessage = function(msg) { 
+        	console.log("收到服务端消息>>>")
+            console.log(msg.data);  
+            //发现消息进入    调后台获取  
+            //getCallingList();  	  
+        };  
+        //关闭事件  
+        socket.onclose = function() {  
+            console.log("Socket已关闭");  
+        };  
+        //发生了错误事件  
+        socket.onerror = function() {  
+            alert("Socket发生了错误");  
+        } 
+        
+      	//发送消息
+        function send(){
+            var message = document.getElementById('text').value;
+            socket.send(message);
+        }
+      	
+      	function test(){
+            $.ajax({
+                type: "GET",
+                url: rootPath+"quartz/send",
+                success: function(data){
+                }
+            });      		
+      	}
+      
+        $(window).onbeforeunload = function(event) {
+            console.log("关闭WebSocket连接！");
+            socket.close();
+        }
+        $(window).unload(function(){ 
+        	 alert("页面关闭、关闭WebSocket连接！");
+             socket.close();  
+        }); 
+	}
+</script>
+</html>
