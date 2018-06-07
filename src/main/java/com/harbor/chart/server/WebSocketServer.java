@@ -7,6 +7,8 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.websocket.OnClose;  
 import javax.websocket.OnError;  
 import javax.websocket.OnMessage;  
@@ -16,6 +18,8 @@ import javax.websocket.server.ServerEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * @author szy
@@ -36,12 +40,9 @@ public class WebSocketServer {
       
     //与某个客户端的连接会话，需要通过它来给客户端发送数据  
     private Session session;  
-  
-    private static ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor();
-    
+      
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
     
-    private  ScheduledFuture<?>  future;;
 	/**
 	 * 连接建立成功调用的方法
 	 */
@@ -76,15 +77,21 @@ public class WebSocketServer {
         //System.out.println("【" + session.getId() + "】客户端的发送消息======内容【" + message + "】");
         
 		//单发消息
-		try {
-			sendInfo(message);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+//		try {
+//			JSONObject jsonObject = new JSONObject();
+//			jsonObject.put("time", dateFormat.format(new Date()));
+//			jsonObject.put("content", message);
+//			sendMessage(jsonObject.toJSONString());
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
 		//群发消息
 		try {
-			sendInfo(message);
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("time", dateFormat.format(new Date()));
+			jsonObject.put("content", message);
+			sendInfo(jsonObject.toJSONString());
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
@@ -97,8 +104,8 @@ public class WebSocketServer {
      */  
     @OnError  
     public void onError(Session session, Throwable error) {  
-        error.printStackTrace();  
-		logger.error("[WebSocketServer.onError] {}", session.getId(),"错误消息:" + error ,"当前时间:" +dateFormat.format(new Date()));
+        //error.printStackTrace();  
+		logger.error("[WebSocketServer.onError] {}", session.getId()+"错误消息:" + error ,"当前时间:" +dateFormat.format(new Date()));
     }  
   
   
