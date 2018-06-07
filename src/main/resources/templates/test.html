@@ -3,20 +3,28 @@
  </head>
 <body class=" theme-blue">
 	<div th:replace="layout :: navbar">(navbar)</div>
-    Welcome<br/><br/><br/>    <hr/>
+    <span style="color: #3498db;padding-left:10px;font-size: 20px; ">chart-tool</span><br/>   <hr/>
     
-    <input id="text" type="text"/>
-    <button onclick="send()">发送消息</button>
-
-    <div id="message"></div>
+    <div style="padding-left: 10px;">
+		<div id="div_msgzone" class="panel panel-default" style=" width: 30%; height:50%;">
+			<div class="panel-heading">消息窗口</div>
+			<div id="div_msg" class="panel-body"></div>
+		</div>
+	
+	<div class="zone_send">
+		<textarea id="inp_send" class="form-control" style=" width: 30%; height:10%;" placeholder="发送的内容"></textarea>
+		<br>
+		<button type="button" id="btn_send" class="btn btn-default" onclick="sendto();">发送（ctrl+回车）</button>
+	</div>
+	</div>	
 </body>
 
 <script type="text/javascript">
 	var socket;  
 	if(typeof(WebSocket) == "undefined") {  
-	    console.log("您的浏览器不支持WebSocket");  
+	    console.log("浏览器似乎不支持这个功能、换一个试试");  
 	}else{  
-	    console.log("您的浏览器支持WebSocket");
+	    console.log("您的浏览器支持chart_tool");
 	    socket = new WebSocket("ws://localhost:8055/chart/websocket");  
         //打开事件  
         socket.onopen = function() {  
@@ -26,7 +34,14 @@
         //获得消息事件  
         socket.onmessage = function(msg) { 
         	console.log("收到服务端消息>>>")
-            console.log(msg.data);  
+        	console.log(msg);  
+        	var msgJson = JSON.parse(msg.data);
+        	console.log(msgJson);
+        	$("#div_msg").append(msgJson.time+":");
+        	$("#div_msg").append('<br/>');
+        	$("#div_msg").append(msgJson.content);
+        	$("#div_msg").append('<br/>');
+        	$('#inp_send').val('');
             //发现消息进入    调后台获取  
             //getCallingList();  	  
         };  
@@ -36,12 +51,12 @@
         };  
         //发生了错误事件  
         socket.onerror = function() {  
-            alert("Socket发生了错误");  
+            console.log("Socket发生了错误");  
         } 
         
       	//发送消息
-        function send(){
-            var message = document.getElementById('text').value;
+        function sendto(){
+            var message = $('#inp_send').val();
             socket.send(message);
         }
       	
@@ -55,7 +70,7 @@
       	}
       
         $(window).onbeforeunload = function(event) {
-            console.log("关闭WebSocket连接！");
+            alert("关闭WebSocket连接！");
             socket.close();
         }
         $(window).unload(function(){ 
