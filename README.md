@@ -1,6 +1,6 @@
 # chart_tool
 one to one || more to more chart_tool
-
+### 消息发送测试页、此模式为群发模式[可开多个不同浏览器做测试]
 ![image](http://p8pawbkta.bkt.clouddn.com/github/jpg/chart_tool.png)
 
 联系方式：
