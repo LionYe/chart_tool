@@ -72,8 +72,7 @@ public class WebSocketServer {
 	 */
     @OnMessage  
     public void onMessage(String message, Session session) {  
-		logger.info("[WebSocketServer.onMessage] {}", session.getId()+
-				"客户端的发送消息======内容:" + message + "当前时间:" + dateFormat.format(new Date()));
+		logger.info("[WebSocketServer.onMessage] {}", session.getId()+ "客户端的发送消息======内容:" + message + "当前时间:" + dateFormat.format(new Date()));
         //System.out.println("【" + session.getId() + "】客户端的发送消息======内容【" + message + "】");
         
 		//单发消息
