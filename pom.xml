@@ -63,11 +63,10 @@
 		    <version>1.0.2</version>  
 		</dependency> 
 		
-		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope> <!-- 表示dependency不作用在编译时，但会作用在运行和测试时  scope默认compile-->
+			<scope>runtime</scope>
 		</dependency>	
 
 		<dependency>
